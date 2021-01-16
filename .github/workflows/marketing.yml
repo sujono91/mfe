@@ -1,15 +1,15 @@
-name: deploy-container
+name: deploy-marketing
  
 on:
   push:
     branches:
       - main
     paths:
-      - "packages/container/**"
+      - "packages/marketing/**"
  
 defaults:
   run:
-    working-directory: packages/container
+    working-directory: packages/marketing
  
 jobs:
   build:
@@ -19,8 +19,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm install
       - run: npm run build
-        env:
-          PRODUCTION_DOMAIN: https://d1hbtozarl8pun.cloudfront.net
  
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -30,9 +28,9 @@ jobs:
           aws-region: us-east-2
  
       - name: Copy files to the production website with the AWS CLI
-        run: aws s3 sync dist s3://sj-mfe-dashboard/container/latest
+        run: aws s3 sync dist s3://sj-mfe-dashboard/marketing/latest
 
-      - run: aws cloudfront create-invalidation --distribution-id EYWXSL4UCIQLV --paths "/container/latest/index.html"
+      - run: aws cloudfront create-invalidation --distribution-id EYWXSL4UCIQLV --paths "/marketing/latest/remoteEntry.js"
         env:
           AWS_ACCESS_KEY_ID: AKIA5CVEVSFWENIQ72P3
           AWS_SECRET_ACCESS_KEY: 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
