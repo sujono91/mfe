@@ -29,3 +29,8 @@ jobs:
  
       - name: Copy files to the production website with the AWS CLI
         run: aws s3 sync dist s3://sj-mfe-dashboard/container/latest
+
+      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/container/latest/index.html"
+        env:
+          AWS_ACCESS_KEY_ID: AKIA5CVEVSFWENIQ72P3
+          AWS_SECRET_ACCESS_KEY: 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
