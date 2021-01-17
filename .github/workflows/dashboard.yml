@@ -1,0 +1,36 @@
+name: deploy-dashboard
+ 
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/dashboard/**"
+ 
+defaults:
+  run:
+    working-directory: packages/dashboard
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run build
+ 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: AKIA5CVEVSFWENIQ72P3
+          aws-secret-access-key: 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
+          aws-region: us-east-2
+ 
+      - name: Copy files to the production website with the AWS CLI
+        run: aws s3 sync dist s3://sj-mfe-dashboard/dashboard/latest
+
+      - run: aws cloudfront create-invalidation --distribution-id EYWXSL4UCIQLV --paths "/dashboard/latest/remoteEntry.js"
+        env:
+          AWS_ACCESS_KEY_ID: AKIA5CVEVSFWENIQ72P3
+          AWS_SECRET_ACCESS_KEY: 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
