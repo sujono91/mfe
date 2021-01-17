@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Router, Route, Redirect, Switch } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
+
 import Header from './components/Header';
 import Progress from './components/Progress';
 
